@@ -25,5 +25,7 @@ public class Example_0 : MonoBehaviour
         //For claricifactions 
         Debug.Log("Total value: " + seconds);
         Debug.Log("Value that resets: " + displaySeconds);
+
+        //test
     }
 }

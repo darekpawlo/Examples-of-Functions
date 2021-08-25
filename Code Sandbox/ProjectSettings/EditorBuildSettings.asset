@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/% Operator/% Operator.unity
+    path: Assets/Scripts/% Operator/% Operator.unity
     guid: fea7b75b25f75b4489a726c60a8dd0b3
   m_configObjects: {}

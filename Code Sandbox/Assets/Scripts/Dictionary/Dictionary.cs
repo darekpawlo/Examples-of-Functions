@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Dictionary : MonoBehaviour
 {
+    //Defining dictionary
     Dictionary<string, int> inventory = new Dictionary<string, int>()
     {
         {"Sword", 100},
@@ -11,6 +12,9 @@ public class Dictionary : MonoBehaviour
         {"Potion",200},
         {"Shield",1000}
     };
+
+    Dictionary<ResoureType_Dictionary, int> scriptKeyDictionary = new Dictionary<ResoureType_Dictionary, int>();
+    [SerializeField] private ResoureType_Dictionary resoureType;
 
     private void Start()
     {
@@ -46,5 +50,9 @@ public class Dictionary : MonoBehaviour
         {
             Debug.Log("removed sword");
         }
+
+        //Can use other scripts as keys or values
+        scriptKeyDictionary[resoureType] = 1;
+        Debug.Log(resoureType.stringName + ": " + scriptKeyDictionary[resoureType]);
     }
 }

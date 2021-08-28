@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AbstractTest : AbstractDamageable
 {
-    private int health = 10;
 
     
 }

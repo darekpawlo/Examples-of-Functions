@@ -9,7 +9,7 @@ public abstract class AbstractDamageable : MonoBehaviour, ITakeDamage
 
     private int health;
 
-    private void Awake()
+    private  void Awake()
     {
         health = maxHealth;
     }

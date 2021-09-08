@@ -10,12 +10,15 @@ public class Grid_Test : MonoBehaviour
     public static event EventHandler<OnValueChangedEventArgs> OnValueChanged;
     public class OnValueChangedEventArgs : EventArgs
     {
-        public int rows;
-        public int columns;
+        public int x;
+        public int y;
         public int[,] grid;
     }
 
-    [SerializeField] private int[,] grid;
+    public static Dictionary<Vector2Int, Transform> templateDictionary = new Dictionary<Vector2Int, Transform>();
+
+    public static int[,] grid;
+    [Range(1,20)]
     [SerializeField] private int rows, columns;
 
     private void Awake()
@@ -47,19 +50,18 @@ public class Grid_Test : MonoBehaviour
 
         templateTransform.name = "X: " + x + " Y: " + y;
         TextMeshProUGUI text = templateTransform.transform.Find("Canvas").transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + grid[x,y].ToString() + "</color>";
+        text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + grid[x, y].ToString() + "</color>";
 
         Button button = templateTransform.transform.Find("Canvas").transform.Find("Button").GetComponent<Button>();
         button.onClick.AddListener(() =>
         {
-            //value += 1;
-            //grid[1, 1] += 1;
             grid[x, y] += 1;
-            //text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + value.ToString() + "</color>";
 
-            OnValueChanged?.Invoke(this, new OnValueChangedEventArgs { rows = rows, columns = columns, grid = grid });
-            //Debug.Log("Grid: " + grid[x, y] + " Value: " + value);
+            OnValueChanged?.Invoke(this, new OnValueChangedEventArgs { x = x, y = y, grid = grid });
         });
+
+        //templateDictionary[$"{x},{y}"] = templateTransform;
+        templateDictionary[new Vector2Int(x,y)] = templateTransform;
     }    
 
     private Vector3 SpawnPosition(int x, int y)
@@ -67,7 +69,7 @@ public class Grid_Test : MonoBehaviour
         //Moves the X by half number of rows
         //And if rows are even it moves by half of the unit size, so that it centers properly
         //Same logic for Y
-        return new Vector3(x - ((rows / 2) - EvenRowsorColumns(rows)), y - ((columns / 2)) - EvenRowsorColumns(columns));
+        return new Vector3(x - (rows / 2 - EvenRowsorColumns(rows)), y - (columns / 2 - EvenRowsorColumns(columns)));
     }
 
     private float EvenRowsorColumns(int value)
@@ -83,3 +85,5 @@ public class Grid_Test : MonoBehaviour
         }
     }
 }
+
+//Sprobowac zrobic dictionary, by kluczem bylo int[,], a wartoscia zwracana Transform, by nie trzeba bylo uzywac tego "transform.Find("X: " + x + " Y: " + y)"

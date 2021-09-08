@@ -12,18 +12,13 @@ public class Grid_Test_UI : MonoBehaviour
 
     private void Grid_Test_OnValueChanged(object sender, Grid_Test.OnValueChangedEventArgs e)
     {
-        for (int x = 0; x < e.rows; x++)
-        {
-            for (int y = 0; y < e.columns; y++)
-            {
-                UpdateEveryText(x, y, e.grid[x, y]);
-            }
-        }
+        UpdateEveryText(e.x, e.y);
     }
 
-    private void UpdateEveryText(int x, int y, int value)
+    private void UpdateEveryText(int x, int y)
     {
-        TextMeshProUGUI text = transform.Find("X: " + x + " Y: " + y).transform.Find("Canvas").transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + value.ToString() + "</color>";
+        Vector2Int val = new Vector2Int(x, y);
+        TextMeshProUGUI text = Grid_Test.templateDictionary[val].transform.Find("Canvas").transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + Grid_Test.grid[x,y].ToString() + "</color>";
     }
 }

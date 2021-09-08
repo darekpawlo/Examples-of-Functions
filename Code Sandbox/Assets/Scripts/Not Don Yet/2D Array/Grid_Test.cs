@@ -7,17 +7,16 @@ using TMPro;
 
 public class Grid_Test : MonoBehaviour
 {
-    public static event EventHandler<OnValueChangedEventArgs> OnValueChanged;
-    public class OnValueChangedEventArgs : EventArgs
+    public static event EventHandler<OnSpawnedTileEveryArgs> OnSpawnedTile;
+    public class OnSpawnedTileEveryArgs: EventArgs
     {
+        public Transform templateTransform;
         public int x;
         public int y;
         public int[,] grid;
     }
 
-    public static Dictionary<Vector2Int, Transform> templateDictionary = new Dictionary<Vector2Int, Transform>();
-
-    public static int[,] grid;
+    private int[,] grid;
     [Range(1,20)]
     [SerializeField] private int rows, columns;
 
@@ -46,22 +45,11 @@ public class Grid_Test : MonoBehaviour
     {
         Transform templateTransform = Instantiate(template, transform);
         templateTransform.position = SpawnPosition(x, y);
+        templateTransform.name = "X: " + x + " Y: " + y;
         templateTransform.gameObject.SetActive(true);
 
-        templateTransform.name = "X: " + x + " Y: " + y;
-        TextMeshProUGUI text = templateTransform.transform.Find("Canvas").transform.Find("Text").GetComponent<TextMeshProUGUI>();
-        text.text = x + "," + y + "\n" + "<size=50%>" + "<color=#FFA34C>" + grid[x, y].ToString() + "</color>";
 
-        Button button = templateTransform.transform.Find("Canvas").transform.Find("Button").GetComponent<Button>();
-        button.onClick.AddListener(() =>
-        {
-            grid[x, y] += 1;
-
-            OnValueChanged?.Invoke(this, new OnValueChangedEventArgs { x = x, y = y, grid = grid });
-        });
-
-        //templateDictionary[$"{x},{y}"] = templateTransform;
-        templateDictionary[new Vector2Int(x,y)] = templateTransform;
+        OnSpawnedTile?.Invoke(this, new OnSpawnedTileEveryArgs { templateTransform = templateTransform, x = x, y = y, grid = grid });
     }    
 
     private Vector3 SpawnPosition(int x, int y)
@@ -85,5 +73,3 @@ public class Grid_Test : MonoBehaviour
         }
     }
 }
-
-//Sprobowac zrobic dictionary, by kluczem bylo int[,], a wartoscia zwracana Transform, by nie trzeba bylo uzywac tego "transform.Find("X: " + x + " Y: " + y)"

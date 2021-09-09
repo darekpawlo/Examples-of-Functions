@@ -34,10 +34,10 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
         scoreText = transform.Find("CanvasPlayers").transform.Find("ScoreText").GetComponent<TMP_Text>();
         UpdateScoreText();
 
-        transform.Find("CanvasPlayers").Find("Image").GetComponent<mButton>().AddListener(() =>
+        /*transform.Find("CanvasPlayers").Find("mButton").GetComponent<Grid_Button>().PassFunction(() =>
         {
             Debug.Log("kupa");
-        });
+        });*/
     }
 
     private void Grid_Test_OnSpawnedTile(object sender, Grid_Test.OnSpawnedTileEveryArgs e)
@@ -64,11 +64,11 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
     {     
         if (!gameOver)
         {
-            Image image = templateTransform.transform.Find("Canvas").transform.Find("Image").GetComponent<Image>();
-            image.gameObject.SetActive(true);
-
             if (grid[x, y] != 1 && grid[x, y] != -1)
             {
+                Image image = templateTransform.transform.Find("Canvas").Find("Button").Find("Image").GetComponent<Image>();
+                image.gameObject.SetActive(true);
+
                 crossTurn = !crossTurn;
 
                 grid[x, y] = crossTurn ? 1 : -1;
@@ -84,35 +84,38 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
 
     private void CheckWinCondition(int x, int y, int[,] grid)
     {
-        //Checking Y
-        if ((grid[x, 1 - 1] + grid[x,1] + grid[x, 1 + 1]) == 3 || (grid[x, 1 - 1] + grid[x, 1] + grid[x, 1 + 1]) == -3)
+        if (!gameOver)
         {
-            gameOver = true;
-            GameOver();
-        }
-        //Checking X
-        else if ((grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == 3 || (grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == -3)
-        {
-            gameOver = true;
-            GameOver();
-        }
-        //Checking Cross from bottom to top
-        else if ((grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == 3 || (grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == -3)
-        {
-            gameOver = true;
-            GameOver();
-        }
-        //Checking Cross from top to bottom
-        else if ((grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == 3 || (grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == -3)
-        {
-            gameOver = true;
-            GameOver();
-        }
-        else if (amountOfMovesLeft <= 0)
-        {
-            gameOver = true;
-            GameOver("Draw!", true);
-        }
+            //Checking Y
+            if ((grid[x, 1 - 1] + grid[x, 1] + grid[x, 1 + 1]) == 3 || (grid[x, 1 - 1] + grid[x, 1] + grid[x, 1 + 1]) == -3)
+            {
+                gameOver = true;
+                GameOver();
+            }
+            //Checking X
+            else if ((grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == 3 || (grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == -3)
+            {
+                gameOver = true;
+                GameOver();
+            }
+            //Checking Cross from bottom to top
+            else if ((grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == 3 || (grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == -3)
+            {
+                gameOver = true;
+                GameOver();
+            }
+            //Checking Cross from top to bottom
+            else if ((grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == 3 || (grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == -3)
+            {
+                gameOver = true;
+                GameOver();
+            }
+            else if (amountOfMovesLeft <= 0)
+            {
+                gameOver = true;
+                GameOver("Draw!", true);
+            }
+        }        
     }
 
     private void GameOver(string textToShow = "You Win!", bool draw = false)

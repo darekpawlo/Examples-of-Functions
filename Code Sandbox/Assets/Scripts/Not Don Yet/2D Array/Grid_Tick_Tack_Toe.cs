@@ -2,17 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
 public class Grid_Tick_Tack_Toe : MonoBehaviour
 {
+    public static event EventHandler OnGameEnded;
+
     [SerializeField] private Sprite Cross;
     [SerializeField] private Sprite Circle;
     [SerializeField] private Grid_ScoreData scoreData;
 
     private bool crossTurn;
-    private bool gameOver;
+    private bool gameEnded;
     private int amountOfMovesLeft;
 
     private TMP_Text scoreText;
@@ -34,10 +37,7 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
         scoreText = transform.Find("CanvasPlayers").transform.Find("ScoreText").GetComponent<TMP_Text>();
         UpdateScoreText();
 
-        /*transform.Find("CanvasPlayers").Find("mButton").GetComponent<Grid_Button>().PassFunction(() =>
-        {
-            Debug.Log("kupa");
-        });*/
+        Grid_Button.sprite = Cross;
     }
 
     private void Grid_Test_OnSpawnedTile(object sender, Grid_Test.OnSpawnedTileEveryArgs e)
@@ -58,22 +58,23 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
             PlaceGridPieceSigns(x, y, grid, templateTransform);
             CheckWinCondition(x, y, grid);
         });
+
     }
 
     private void PlaceGridPieceSigns(int x, int y, int[,] grid, Transform templateTransform)
     {     
-        if (!gameOver)
+        if (!gameEnded)
         {
             if (grid[x, y] != 1 && grid[x, y] != -1)
             {
                 Image image = templateTransform.transform.Find("Canvas").Find("Button").Find("Image").GetComponent<Image>();
-                image.gameObject.SetActive(true);
 
                 crossTurn = !crossTurn;
 
                 grid[x, y] = crossTurn ? 1 : -1;
 
                 image.sprite = crossTurn ? Cross : Circle;
+                Grid_Button.sprite = crossTurn? Circle : Cross;
 
                 ShowActivePlayer();
 
@@ -84,41 +85,41 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
 
     private void CheckWinCondition(int x, int y, int[,] grid)
     {
-        if (!gameOver)
+        if (!gameEnded)
         {
             //Checking Y
             if ((grid[x, 1 - 1] + grid[x, 1] + grid[x, 1 + 1]) == 3 || (grid[x, 1 - 1] + grid[x, 1] + grid[x, 1 + 1]) == -3)
             {
-                gameOver = true;
-                GameOver();
+                gameEnded = true;
+                GameEnded();
             }
             //Checking X
             else if ((grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == 3 || (grid[1 - 1, y] + grid[1, y] + grid[1 + 1, y]) == -3)
             {
-                gameOver = true;
-                GameOver();
+                gameEnded = true;
+                GameEnded();
             }
             //Checking Cross from bottom to top
             else if ((grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == 3 || (grid[1 - 1, 1 - 1] + grid[1, 1] + grid[1 + 1, 1 + 1]) == -3)
             {
-                gameOver = true;
-                GameOver();
+                gameEnded = true;
+                GameEnded();
             }
             //Checking Cross from top to bottom
             else if ((grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == 3 || (grid[1 - 1, 1 + 1] + grid[1, 1] + grid[1 + 1, 1 - 1]) == -3)
             {
-                gameOver = true;
-                GameOver();
+                gameEnded = true;
+                GameEnded();
             }
             else if (amountOfMovesLeft <= 0)
             {
-                gameOver = true;
-                GameOver("Draw!", true);
+                gameEnded = true;
+                GameEnded("Draw!", true);
             }
         }        
     }
 
-    private void GameOver(string textToShow = "You Win!", bool draw = false)
+    private void GameEnded(string textToShow = "You Win!", bool draw = false)
     {
         transform.Find("Canvas").gameObject.SetActive(true);
         TMP_Text text = transform.Find("Canvas").transform.Find("Text").GetComponent<TMP_Text>();
@@ -143,6 +144,8 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
 
         UpdateScoreText();
         ShowActivePlayer();
+
+        OnGameEnded?.Invoke(this, EventArgs.Empty);
     }
 
     private void ShowActivePlayer()

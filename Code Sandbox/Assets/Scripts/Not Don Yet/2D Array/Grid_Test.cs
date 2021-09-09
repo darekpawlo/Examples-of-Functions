@@ -7,6 +7,11 @@ using TMPro;
 
 public class Grid_Test : MonoBehaviour
 {
+    public static event EventHandler<OnSpawnedGirdEventArgs> OnSpawnGrid;
+    public class OnSpawnedGirdEventArgs : EventArgs
+    {
+        public int[,] grid;
+    }
     public static event EventHandler<OnSpawnedTileEveryArgs> OnSpawnedTile;
     public class OnSpawnedTileEveryArgs: EventArgs
     {
@@ -20,7 +25,7 @@ public class Grid_Test : MonoBehaviour
     [Range(1,20)]
     [SerializeField] private int rows, columns;
 
-    private void Awake()
+    private void Start()
     {
         Transform template = transform.Find("Template");
         template.gameObject.SetActive(false);
@@ -33,12 +38,14 @@ public class Grid_Test : MonoBehaviour
             for (int y = 0; y < columns; y++)
             {
                 //Assigning value to array
-                grid[x, y] += index;
+                //grid[x, y] += index;
                 SpawnTile(x, y, template);
 
                 index++;
             }
         }
+
+        OnSpawnGrid?.Invoke(this, new OnSpawnedGirdEventArgs { grid = grid });
     }
 
     private void SpawnTile(int x, int y, Transform template)
@@ -47,7 +54,6 @@ public class Grid_Test : MonoBehaviour
         templateTransform.position = SpawnPosition(x, y);
         templateTransform.name = "X: " + x + " Y: " + y;
         templateTransform.gameObject.SetActive(true);
-
 
         OnSpawnedTile?.Invoke(this, new OnSpawnedTileEveryArgs { templateTransform = templateTransform, x = x, y = y, grid = grid });
     }    

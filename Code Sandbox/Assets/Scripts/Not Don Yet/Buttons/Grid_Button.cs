@@ -5,71 +5,60 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Grid_Button : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class Grid_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private bool clicked;
-
-    private static Sprite sprite;
-
     private Image image;
 
-    private Action action;
+    public static Sprite sprite;
 
+    private bool clicked;
+    private bool gameEnded;
 
-    private void Awake()
+    private void OnEnable()
+    {
+        Grid_Tick_Tack_Toe.OnGameEnded += Grid_Tick_Tack_Toe_OnGameOver;
+    }
+
+    private void OnDisable()
+    {
+        Grid_Tick_Tack_Toe.OnGameEnded -= Grid_Tick_Tack_Toe_OnGameOver;
+    }
+
+    private void Grid_Tick_Tack_Toe_OnGameOver(object sender, EventArgs e)
+    {
+        gameEnded = true;
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+    }
+
+    private void Start()
     {
         image = transform.Find("Image").GetComponent<Image>();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        action();
-    }
-    public void PassFunction(Action a)
-    {
-        action = a;
-    }
-
-    private void ChangeSprite(Sprite s)
-    {
-        image.gameObject.SetActive(true);
-        image.sprite = s;
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!clicked)
+        if (!clicked && !gameEnded)
         {
-            ChangeSprite(sprite);
+            image.gameObject.SetActive(true);
+            image.sprite = sprite;
             image.color = new Color(image.color.r, image.color.g, image.color.b, .1f);
         }        
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!clicked)
+        if (!clicked && !gameEnded)
         {
             image.gameObject.SetActive(false);
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        ChangeSprite(sprite);
-        clicked = true;
-        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (!clicked)
+        if (!clicked && !gameEnded)
         {
-            image.gameObject.SetActive(false);
-        }
-    }
-
-    public static void SetSprite(Sprite s)
-    {
-        sprite = s;
+            clicked = true;
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
+        }        
     }
 }

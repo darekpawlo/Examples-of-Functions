@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8e12f010c4aa384c9dedb58d13733be, type: 3}
   m_Name: ScoreData
   m_EditorClassIdentifier: 
-  CrossPlayerScore: 7
-  CirclePlayerScore: 5
+  CrossPlayerScore: 0
+  CirclePlayerScore: 0

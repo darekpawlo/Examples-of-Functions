@@ -7,7 +7,9 @@ using TMPro;
 
 public class Grid_Test : MonoBehaviour
 {
-    public static event EventHandler<OnSpawnedGirdEventArgs> OnSpawnGrid;
+    public static Dictionary<Vector2, Transform> templatesDictionary = new Dictionary<Vector2, Transform>();
+
+    public static event EventHandler<OnSpawnedGirdEventArgs> OnSpawnedGrid;
     public class OnSpawnedGirdEventArgs : EventArgs
     {
         public int[,] grid;
@@ -45,7 +47,7 @@ public class Grid_Test : MonoBehaviour
             }
         }
 
-        OnSpawnGrid?.Invoke(this, new OnSpawnedGirdEventArgs { grid = grid });
+        OnSpawnedGrid?.Invoke(this, new OnSpawnedGirdEventArgs { grid = grid });
     }
 
     private void SpawnTile(int x, int y, Transform template)
@@ -56,6 +58,7 @@ public class Grid_Test : MonoBehaviour
         templateTransform.gameObject.SetActive(true);
 
         OnSpawnedTile?.Invoke(this, new OnSpawnedTileEveryArgs { templateTransform = templateTransform, x = x, y = y, grid = grid });
+        templatesDictionary[new Vector2(x, y)] = templateTransform;
     }    
 
     private Vector3 SpawnPosition(int x, int y)

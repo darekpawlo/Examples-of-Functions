@@ -7,4 +7,5 @@ public class Grid_ScoreData : ScriptableObject
 {
     public int CrossPlayerScore;
     public int CirclePlayerScore;
+    public bool NotCrossPlayerStarts;
 }

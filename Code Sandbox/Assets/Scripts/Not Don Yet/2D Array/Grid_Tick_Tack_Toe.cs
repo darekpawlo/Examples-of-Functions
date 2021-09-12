@@ -257,12 +257,12 @@ public class Grid_Tick_Tack_Toe : MonoBehaviour
 
         if (changeStartPosition)
         {
-            image.rectTransform.position = new Vector2(scoreData.NotCrossPlayerStarts ? -image.rectTransform.position.x : image.rectTransform.position.x, image.rectTransform.position.y);
+            image.rectTransform.anchoredPosition = new Vector2(scoreData.NotCrossPlayerStarts ? -image.rectTransform.anchoredPosition.x : image.rectTransform.anchoredPosition.x, image.rectTransform.anchoredPosition.y);
         }
         else
         {
             int positionModifier = -1;
-            image.rectTransform.position = new Vector2(image.rectTransform.position.x * positionModifier, image.rectTransform.position.y);
+            image.rectTransform.anchoredPosition = new Vector2(image.rectTransform.anchoredPosition.x * positionModifier, image.rectTransform.anchoredPosition.y);
         }
         
     }

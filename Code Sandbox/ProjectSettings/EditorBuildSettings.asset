@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scripts/Not Don Yet/2D Array/Make a Grid with a 2D Array/2D Array.unity
+    path: Assets/Scripts/2D Array/Make a Grid with a 2D Array/2D Array.unity
     guid: 69a6e096cf2f4bc42b5ba4395f0f1282
   m_configObjects: {}
